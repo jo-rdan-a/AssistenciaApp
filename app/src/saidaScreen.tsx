@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import BackButton from '../../components/BackButton';
 
 export default function SaidaScreen() {
   const [osNumber, setOsNumber] = useState('');
@@ -14,38 +15,41 @@ export default function SaidaScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Controle de Saída</Text>
-      
-      <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          placeholder="N° da OS"
-          keyboardType="numeric"
-          value={osNumber}
-          onChangeText={setOsNumber}
-        />
+    <View style={styles.container}>
+      <BackButton />
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>Controle de Saída</Text>
         
-        <View style={styles.productList}>
-          {[1, 2, 3].map((item, index) => (
-            <View key={item} style={styles.productItem}>
-              <Text style={styles.productText}>Peça {item}</Text>
-              <TextInput 
-                style={styles.quantityInput}
-                placeholder="Qtd"
-                keyboardType="numeric"
-                value={quantities[index]}
-                onChangeText={(value) => updateQuantity(index, value)}
-              />
-            </View>
-          ))}
+        <View style={styles.form}>
+          <TextInput
+            style={styles.input}
+            placeholder="N° da OS"
+            keyboardType="numeric"
+            value={osNumber}
+            onChangeText={setOsNumber}
+          />
+          
+          <View style={styles.productList}>
+            {[1, 2, 3].map((item, index) => (
+              <View key={item} style={styles.productItem}>
+                <Text style={styles.productText}>Peça {item}</Text>
+                <TextInput 
+                  style={styles.quantityInput}
+                  placeholder="Qtd"
+                  keyboardType="numeric"
+                  value={quantities[index]}
+                  onChangeText={(value) => updateQuantity(index, value)}
+                />
+              </View>
+            ))}
+          </View>
         </View>
-      </View>
 
-      <TouchableOpacity style={styles.registerButton}>
-        <Text style={styles.buttonText}>Registrar Saída</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity style={styles.registerButton}>
+          <Text style={styles.buttonText}>Registrar Saída</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
   );
 }
 

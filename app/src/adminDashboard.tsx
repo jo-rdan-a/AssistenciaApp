@@ -1,29 +1,27 @@
-import { MaterialIcons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
-import React from 'react';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { router } from 'expo-router';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import colors from './styles/colors';
 
 const AdminDashboard = () => {
   return (
-    <View style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
-      <ScrollView style={styles.container}>
+    <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* Cabeçalho dentro do ScrollView, alinhado */}
         <View style={styles.headerRow}>
           <View style={styles.headerLeft}>
             <Image
-              source={require('../assets/images/servico-tecnico.png')}
+              source={require('../../assets/images/logo.png')}
               style={styles.logo}
               resizeMode="contain"
             />
-            <Text style={styles.appTitle}>Assistência Técnica</Text>
           </View>
           <TouchableOpacity style={styles.profileButton}>
-            <MaterialIcons name="account-circle" size={40} color="#2A5C8A" />
+            <MaterialIcons name="account-circle" size={40} color={colors.primary} />
           </TouchableOpacity>
         </View>
     
-        {/* caixa com a movimentação do dia*/
-          } 
+        {/* caixa com a movimentação do dia*/} 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Caixa do Dia</Text>
           <View style={styles.infoBox}>
@@ -67,47 +65,45 @@ const AdminDashboard = () => {
           </View>
         </View>
 
-
         {/* Ações Rápidas */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>AÇÕES RÁPIDAS</Text>
           <View style={styles.quickActions}>
-            <Link href="/src/entradaScreen" asChild>
-              <TouchableOpacity style={styles.actionButton}>
-                <MaterialIcons name="login" size={24} color="#333" />
-                <Text style={styles.actionText}>ENTRADA</Text>
-              </TouchableOpacity>
-            </Link>
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => router.push('/src/entradaScreen')}
+            >
+              <MaterialIcons name="login" size={24} color={colors.primary} />
+              <Text style={styles.actionText}>ENTRADA</Text>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.actionButton}>
-              <MaterialIcons name="assignment" size={24} color="#333" />
+              <MaterialIcons name="assignment" size={24} color={colors.primary} />
               <Text style={styles.actionText}>ATENDIMENTO</Text>
             </TouchableOpacity>
-            <Link href="/src/saidaScreen" asChild>
-              <TouchableOpacity style={styles.actionButton}>
-                <MaterialIcons name="logout" size={24} color="#333" />
-                <Text style={styles.actionText}>SAÍDA</Text>
-              </TouchableOpacity>
-            </Link>
-            <Link href="/src/agendamentoScreen" asChild>
-              <TouchableOpacity style={styles.actionButton}>
-                <MaterialIcons name="calendar-today" size={24} color="#333" />
-                <Text style={styles.actionText}>AGENDA</Text>
-              </TouchableOpacity>
-            </Link>
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => router.push('/src/saidaScreen')}
+            >
+              <MaterialIcons name="logout" size={24} color={colors.primary} />
+              <Text style={styles.actionText}>SAÍDA</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.actionButton}
+              onPress={() => router.push('/src/agendamentoScreen')}
+            >
+              <MaterialIcons name="calendar-today" size={24} color={colors.primary} />
+              <Text style={styles.actionText}>AGENDA</Text>
+            </TouchableOpacity>
             <View style={styles.actionButton}>
-              <MaterialIcons name="attach-money" size={24} color="#333" />
+              <MaterialIcons name="attach-money" size={24} color={colors.primary} />
               <Text style={styles.actionText}>ORÇAMENTO</Text>
             </View>
             <View style={styles.actionButton}>
-              <MaterialIcons name="people" size={24} color="#333" />
+              <MaterialIcons name="people" size={24} color={colors.primary} />
               <Text style={styles.actionText}>CLIENTES</Text>
             </View>
           </View>
         </View>
-
-        
-       
-        {/* Sugestão: Adicione um rodapé com informações de contato ou versão do app aqui */}
       </ScrollView>
     </View>
   );
@@ -123,11 +119,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     marginBottom: 10,
     borderRadius: 0,
-    elevation: 0,
-    shadowColor: 'transparent',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0,
-    shadowRadius: 0,
   },
   headerLeft: {
     flexDirection: 'row',
@@ -135,14 +126,9 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   logo: {
-    width: 40,
-    height: 40,
+    width: 200,
+    height: 100,
     marginRight: 10,
-  },
-  appTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2A5C8A',
   },
   profileButton: {
     padding: 4,
@@ -157,14 +143,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     padding: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
   },
   adminSection: {
-    backgroundColor: '#f0f4fa', // Sugestão: cor diferente para destacar
+    backgroundColor: '#f0f4fa',
   },
   sectionTitle: {
     fontSize: 18,
@@ -222,13 +203,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 15,
     padding: 10,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: colors.white,
     borderRadius: 6,
+    borderWidth: 1,
+    borderColor: colors.primary
   },
   actionText: {
     marginTop: 5,
     fontSize: 12,
     textAlign: 'center',
+    color: colors.primary,
   },
   adminAction: {
     padding: 12,

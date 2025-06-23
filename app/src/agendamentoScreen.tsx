@@ -1,12 +1,14 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import BackButton from '../../components/BackButton';
 
 export default function AgendamentoScreen() {
   const [selectedDate, setSelectedDate] = useState('');
 
   return (
     <View style={styles.container}>
+      <BackButton />
       <Text style={styles.title}>Agendar Serviço</Text>
       
       {/* Calendário temporário - você precisará instalar react-native-calendars */}

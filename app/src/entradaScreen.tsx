@@ -1,6 +1,8 @@
 import { MaterialIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import BackButton from '../../components/BackButton';
+import colors from './styles/colors';
 
 export default function EntradaScreen() {
   const [productCode, setProductCode] = useState('');
@@ -9,6 +11,7 @@ export default function EntradaScreen() {
 
   return (
     <View style={styles.container}>
+      <BackButton />
       <Text style={styles.title}>Controle de Entrada</Text>
       
       <View style={styles.form}>
@@ -36,8 +39,8 @@ export default function EntradaScreen() {
         />
 
         <TouchableOpacity style={styles.scanButton}>
-          <MaterialIcons name="qr-code-scanner" size={24} color="white" />
-          <Text style={styles.buttonText}>Escanear Código</Text>
+          <MaterialIcons name="qr-code-scanner" size={24} color={colors.primary} />
+          <Text style={styles.scanText}>Escanear Código</Text>
         </TouchableOpacity>
       </View>
 
@@ -52,17 +55,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5f5f5'
+    backgroundColor: colors.lightGray
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 30,
     textAlign: 'center',
-    color: '#2A5C8A'
+    color: colors.primary
   },
   form: {
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
     borderRadius: 8,
     padding: 20,
     marginBottom: 20,
@@ -74,17 +77,20 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    borderColor: '#ddd',
+    borderColor: colors.lightGray,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 15,
     marginBottom: 15,
-    backgroundColor: 'white'
+    backgroundColor: colors.lightGray,
+    color: colors.gray
   },
   scanButton: {
     height: 50,
     borderRadius: 8,
-    backgroundColor: '#2A5C8A',
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
@@ -93,13 +99,19 @@ const styles = StyleSheet.create({
   registerButton: {
     height: 50,
     borderRadius: 8,
-    backgroundColor: '#F07F13',
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20
   },
+  scanText: {
+    color: colors.primary,
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 10
+  },
   buttonText: {
-    color: 'white',
+    color: colors.white,
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 10
