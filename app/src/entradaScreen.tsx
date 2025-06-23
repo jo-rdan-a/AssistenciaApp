@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 30,
-    textAlign: 'center',
+    textAlign: 'left',
     color: colors.primary
   },
   form: {

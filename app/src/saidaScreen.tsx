@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import BackButton from '../../components/BackButton';
+import css from './styles/globalStyles';
 
 export default function SaidaScreen() {
   const [osNumber, setOsNumber] = useState('');
@@ -15,10 +16,10 @@ export default function SaidaScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={css.container}>
       <BackButton />
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Controle de Saída</Text>
+      <ScrollView contentContainerStyle={css.container}>
+        <Text style={css.title}>Controle de Saída</Text>
         
         <View style={styles.form}>
           <TextInput
@@ -45,8 +46,8 @@ export default function SaidaScreen() {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.registerButton}>
-          <Text style={styles.buttonText}>Registrar Saída</Text>
+        <TouchableOpacity style={css.registerButton}>
+          <Text style={css.buttonText}>Registrar Saída</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>
@@ -54,11 +55,6 @@ export default function SaidaScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 20,
-    backgroundColor: '#f5f5f5'
-  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -111,18 +107,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     textAlign: 'center',
     backgroundColor: 'white'
-  },
-  registerButton: {
-    height: 50,
-    borderRadius: 8,
-    backgroundColor: '#F07F13',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold'
   }
 });

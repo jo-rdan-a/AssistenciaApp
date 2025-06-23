@@ -2,6 +2,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import BackButton from '../../components/BackButton';
+import colors from './styles/colors';
 
 export default function AgendamentoScreen() {
   const [selectedDate, setSelectedDate] = useState('');
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#2A5C8A'
+    color: colors.primary,
   },
   calendarPlaceholder: {
     backgroundColor: 'white',
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
   },
   calendarText: {
     fontSize: 16,
-    color: '#666',
+    color: colors.gray,
     marginBottom: 10
   },
   timeSlots: {
@@ -84,12 +85,12 @@ const styles = StyleSheet.create({
   timeText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#2A5C8A'
+    color: colors.primary
   },
   confirmButton: {
     height: 50,
     borderRadius: 8,
-    backgroundColor: '#F07F13',
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
