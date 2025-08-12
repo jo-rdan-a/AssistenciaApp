@@ -1,107 +1,118 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '../../contexts/ThemeContext';
 import colors from './styles/colors';
 
 const AdminDashboard = () => {
+  const { isDarkMode, primaryColor } = useTheme();
+  
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, isDarkMode && styles.containerDark]}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Cabeçalho dentro do ScrollView, alinhado */}
-        <View style={styles.headerRow}>
-          <View style={styles.headerLeft}>
-            <Image
-              source={require('../../assets/images/logo.png')}
-              style={styles.logo}
-              resizeMode="contain"
-            />
+          <View style={[styles.headerRow, isDarkMode && styles.headerRowDark]}>
+            <View style={styles.headerLeft}>
+              <Text style={[styles.headerTitle, {color: primaryColor}]}>Assistência App</Text>
+            </View>
+            <TouchableOpacity 
+              style={[styles.profileButton, isDarkMode && styles.profileButtonDark]}
+              onPress={() => router.push('/src/perfilScreen')}
+            >
+              <MaterialIcons name="person" size={24} color={primaryColor} />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.profileButton}>
-            <MaterialIcons name="account-circle" size={40} color={colors.primary} />
-          </TouchableOpacity>
-        </View>
     
         {/* caixa com a movimentação do dia*/} 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Caixa do Dia</Text>
-          <View style={styles.infoBox}>
-            <Text style={styles.infoText}>Valor arrecadado até o momento</Text>
-            <Text style={styles.infoText}>Movimentação da assistência em tempo real</Text>
+        <View style={[styles.section, isDarkMode && styles.sectionDark]}>
+          <Text style={[styles.sectionTitle, isDarkMode && styles.textDark]}>Caixa do Dia</Text>
+          <View style={[styles.infoBox, isDarkMode && styles.infoBoxDark]}>
+            <Text style={[styles.infoText, isDarkMode && styles.textDark]}>Valor arrecadado até o momento</Text>
+            <Text style={[styles.infoText, isDarkMode && styles.textDark]}>Movimentação da assistência em tempo real</Text>
           </View>
         </View>
 
         {/* produtos entregues e em andamento */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Minha Assistência</Text>
-          <View style={styles.employeeCard}>
-            <Text style={styles.employeeName}>Eduardo Oliveira</Text>
+        <View style={[styles.section, isDarkMode && styles.sectionDark]}>
+          <Text style={[styles.sectionTitle, isDarkMode && styles.textDark]}>Minha Assistência</Text>
+          <View style={[styles.employeeCard, isDarkMode && styles.employeeCardDark]}>
+            <Text style={[styles.employeeName, isDarkMode && styles.textDark]}>Eduardo Oliveira</Text>
             <View style={styles.row}>
-              <Text>Dinheiro: R$ 30,00</Text>
-              <Text>Cartão: R$ 290,00</Text>
+              <Text style={isDarkMode && styles.textDark}>Dinheiro: R$ 30,00</Text>
+              <Text style={isDarkMode && styles.textDark}>Cartão: R$ 290,00</Text>
             </View>
             <View style={styles.row}>
-              <Text>A receber: R$ 630,00</Text>
-              <Text>Despesas: R$ 0,00</Text>
+              <Text style={isDarkMode && styles.textDark}>A receber: R$ 630,00</Text>
+              <Text style={isDarkMode && styles.textDark}>Despesas: R$ 0,00</Text>
             </View>
             <View style={styles.totalRow}>
-              <Text style={styles.bold}>Total: R$ 950,00</Text>
-              <Text style={styles.status}>Na assistência</Text>
+              <Text style={[styles.bold, isDarkMode && styles.textDark]}>Total: R$ 950,00</Text>
+              <Text style={[styles.status, {color: primaryColor}]}>Na assistência</Text>
             </View>
           </View>
-          <View style={styles.employeeCard}>
-            <Text style={styles.employeeName}>Alex</Text>
+          <View style={[styles.employeeCard, isDarkMode && styles.employeeCardDark]}>
+            <Text style={[styles.employeeName, isDarkMode && styles.textDark]}>Alex</Text>
             <View style={styles.row}>
-              <Text>Dinheiro: R$ 45,00</Text>
-              <Text>Cartão: R$ 150,00</Text>
+              <Text style={isDarkMode && styles.textDark}>Dinheiro: R$ 45,00</Text>
+              <Text style={isDarkMode && styles.textDark}>Cartão: R$ 150,00</Text>
             </View>
             <View style={styles.row}>
-              <Text>A receber: R$ 420,00</Text>
-              <Text>Despesas: R$ 25,00</Text>
+              <Text style={isDarkMode && styles.textDark}>A receber: R$ 420,00</Text>
+              <Text style={isDarkMode && styles.textDark}>Despesas: R$ 25,00</Text>
             </View>
             <View style={styles.totalRow}>
-              <Text style={styles.bold}>Total: R$ 615,00</Text>
-              <Text style={styles.status}>Entrega(o)</Text>
+              <Text style={[styles.bold, isDarkMode && styles.textDark]}>Total: R$ 615,00</Text>
+              <Text style={[styles.status, {color: primaryColor}]}>Entrega(o)</Text>
             </View>
           </View>
         </View>
 
         {/* Ações Rápidas */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>AÇÕES RÁPIDAS</Text>
+        <View style={[styles.section, isDarkMode && styles.sectionDark]}>
+          <Text style={[styles.sectionTitle, isDarkMode && styles.textDark]}>AÇÕES RÁPIDAS</Text>
           <View style={styles.quickActions}>
             <TouchableOpacity 
-              style={styles.actionButton}
+              style={[styles.actionButton, isDarkMode && styles.actionButtonDark]}
               onPress={() => router.push('/src/entradaScreen')}
             >
-              <MaterialIcons name="login" size={24} color={colors.primary} />
-              <Text style={styles.actionText}>ENTRADA</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.actionButton}>
-              <MaterialIcons name="assignment" size={24} color={colors.primary} />
-              <Text style={styles.actionText}>ATENDIMENTO</Text>
+              <MaterialIcons name="login" size={24} color={primaryColor} />
+              <Text style={[styles.actionText, isDarkMode && styles.textDark]}>ENTRADA</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              style={styles.actionButton}
+              style={[styles.actionButton, isDarkMode && styles.actionButtonDark]}
+              onPress={() => router.push('/src/atendimentoScreen')}
+            >
+              <MaterialIcons name="assignment" size={24} color={primaryColor} />
+              <Text style={[styles.actionText, isDarkMode && styles.textDark]}>ATENDIMENTO</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.actionButton, isDarkMode && styles.actionButtonDark]}
               onPress={() => router.push('/src/saidaScreen')}
             >
-              <MaterialIcons name="logout" size={24} color={colors.primary} />
-              <Text style={styles.actionText}>SAÍDA</Text>
+              <MaterialIcons name="logout" size={24} color={primaryColor} />
+              <Text style={[styles.actionText, isDarkMode && styles.textDark]}>SAÍDA</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              style={styles.actionButton}
+              style={[styles.actionButton, isDarkMode && styles.actionButtonDark]}
               onPress={() => router.push('/src/agendamentoScreen')}
             >
-              <MaterialIcons name="calendar-today" size={24} color={colors.primary} />
-              <Text style={styles.actionText}>AGENDA</Text>
+              <MaterialIcons name="calendar-today" size={24} color={primaryColor} />
+              <Text style={[styles.actionText, isDarkMode && styles.textDark]}>AGENDA</Text>
             </TouchableOpacity>
-            <View style={styles.actionButton}>
-              <MaterialIcons name="attach-money" size={24} color={colors.primary} />
-              <Text style={styles.actionText}>ORÇAMENTO</Text>
-            </View>
-            <View style={styles.actionButton}>
-              <MaterialIcons name="people" size={24} color={colors.primary} />
-              <Text style={styles.actionText}>CLIENTES</Text>
-            </View>
+            <TouchableOpacity 
+              style={[styles.actionButton, isDarkMode && styles.actionButtonDark]}
+              onPress={() => router.push('/src/orcamentoScreen')}
+            >
+              <MaterialIcons name="attach-money" size={24} color={primaryColor} />
+              <Text style={[styles.actionText, isDarkMode && styles.textDark]}>ORÇAMENTO</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={[styles.actionButton, isDarkMode && styles.actionButtonDark]}
+              onPress={() => router.push('/src/clientesScreen')}
+            >
+              <MaterialIcons name="people" size={24} color={primaryColor} />
+              <Text style={[styles.actionText, isDarkMode && styles.textDark]}>CLIENTES</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -120,6 +131,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 0,
   },
+  headerRowDark: {
+    backgroundColor: 'transparent',
+  },
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -134,15 +148,25 @@ const styles = StyleSheet.create({
     padding: 4,
     marginRight: 8,
   },
+  profileButtonDark: {
+    backgroundColor: 'transparent',
+  },
   container: {
     flex: 1,
     padding: 15,
+    backgroundColor: colors.background,
+  },
+  containerDark: {
+    backgroundColor: '#121212',
   },
   section: {
     marginBottom: 20,
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
     borderRadius: 8,
     padding: 15,
+  },
+  sectionDark: {
+    backgroundColor: '#1E1E1E',
   },
   adminSection: {
     backgroundColor: '#f0f4fa',
@@ -156,6 +180,9 @@ const styles = StyleSheet.create({
   infoBox: {
     marginBottom: 10,
   },
+  infoBoxDark: {
+    backgroundColor: '#2C2C2C',
+  },
   infoText: {
     fontSize: 14,
     color: '#666',
@@ -167,6 +194,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     padding: 10,
     marginBottom: 10,
+  },
+  employeeCardDark: {
+    borderColor: '#444',
+    backgroundColor: '#2C2C2C',
   },
   employeeName: {
     fontWeight: 'bold',
@@ -208,11 +239,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.primary
   },
+  actionButtonDark: {
+    backgroundColor: '#2C2C2C',
+    borderColor: '#444',
+  },
   actionText: {
     marginTop: 5,
     fontSize: 12,
     textAlign: 'center',
     color: colors.primary,
+  },
+  textDark: {
+    color: '#E0E0E0',
   },
   adminAction: {
     padding: 12,

@@ -60,7 +60,10 @@ export default function LoginScreen() {
         </View>
 
         {/* Esqueceu sua senha */}
-        <TouchableOpacity style={styles.senhaButton}>
+        <TouchableOpacity 
+          style={styles.senhaButton}
+          onPress={() => router.push('/src/recuperarSenhaScreen')}
+        >
           <Text style={styles.textButton}>Esqueceu sua senha?</Text>
         </TouchableOpacity>
 
@@ -74,7 +77,10 @@ export default function LoginScreen() {
         </TouchableOpacity>
 
         {/* Botão de Criar conta */}
-        <TouchableOpacity style={styles.secondaryButton}>
+        <TouchableOpacity 
+          style={styles.secondaryButton}
+          onPress={() => router.push('/src/cadastroScreen')}
+        >
           <Text style={styles.secondaryButtonText}>Criar conta</Text>
         </TouchableOpacity>
     </View>
