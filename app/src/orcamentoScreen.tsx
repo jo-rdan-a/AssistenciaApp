@@ -80,6 +80,15 @@ export default function OrcamentoScreen() {
     // Aqui seria implementada a navegação para a tela de edição de orçamento
   };
 
+  const handleAprovarOrcamento = (id: string) => {
+    Alert.alert('Aprovar Orçamento', `Orçamento ${id} aprovado com sucesso!`);
+    // Aqui seria implementada a lógica para aprovar o orçamento
+  };
+
+  const isOrcamentoAltoValor = (valor: number) => {
+    return valor > 300; // Considera alto valor orçamentos acima de R$ 300,00
+  };
+
   return (
     <View style={[styles.container, isDarkMode && styles.containerDark]}>
       <View style={[styles.header, isDarkMode && styles.headerDark]}>
@@ -113,8 +122,15 @@ export default function OrcamentoScreen() {
           >
             <View style={styles.cardHeader}>
               <Text style={[styles.clienteName, isDarkMode && styles.textDark]}>{item.cliente}</Text>
-              <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
-                <Text style={styles.statusText}>{item.status}</Text>
+              <View style={styles.headerRight}>
+                {isOrcamentoAltoValor(item.valor) && (
+                  <View style={styles.altoValorBadge}>
+                    <Text style={styles.altoValorText}>Alto Valor</Text>
+                  </View>
+                )}
+                <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
+                  <Text style={styles.statusText}>{item.status}</Text>
+                </View>
               </View>
             </View>
             <View style={styles.cardBody}>
@@ -124,6 +140,15 @@ export default function OrcamentoScreen() {
                 <Text style={[styles.data, isDarkMode && styles.textDark]}><Text style={[styles.label, isDarkMode && styles.labelDark]}>Data:</Text> {item.data}</Text>
                 <Text style={[styles.valor, isDarkMode && styles.valorDark]}>{formatarValor(item.valor)}</Text>
               </View>
+              {item.status === 'Pendente' && (
+                <TouchableOpacity 
+                  style={[styles.approveButton, isDarkMode && styles.approveButtonDark]} 
+                  onPress={() => handleAprovarOrcamento(item.id)}
+                >
+                  <Icon name="check-circle" size={16} color={isDarkMode ? '#121212' : colors.white} />
+                  <Text style={[styles.approveButtonText, isDarkMode && styles.approveButtonTextDark]}>Aprovar Orçamento</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </TouchableOpacity>
         )}
@@ -217,6 +242,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   clienteName: {
     fontSize: 16,
     fontWeight: 'bold',
@@ -284,5 +314,38 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.gray,
     textAlign: 'center',
+  },
+  altoValorBadge: {
+    backgroundColor: '#FFD700',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  altoValorText: {
+    color: '#333',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  approveButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#4CAF50',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 4,
+    marginTop: 8,
+    gap: 8,
+  },
+  approveButtonDark: {
+    backgroundColor: '#8BC34A',
+  },
+  approveButtonText: {
+    color: colors.white,
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  approveButtonTextDark: {
+    color: '#121212',
   },
 });
