@@ -1,11 +1,9 @@
-import { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, KeyboardAvoidingView, Platform, FlatList } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
+import { Picker } from '@react-native-picker/picker';
 import { router } from 'expo-router';
-import BackButton from '../../components/BackButton';
+import { useState } from 'react';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
-import css from './styles/globalStyles';
 import colors from './styles/colors';
 
 type SaidaItem = {
@@ -187,147 +185,149 @@ export default function SaidaScreen() {
       </View>
       
       <ScrollView style={styles.scrollView}>
-        <View style={[styles.form, isDarkMode && styles.formDark]}>
-          <TextInput
-            style={[styles.input, isDarkMode && styles.inputDark]}
-            placeholder="N° da OS"
-            placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-            keyboardType="numeric"
-            value={osNumber}
-            onChangeText={setOsNumber}
-          />
-          
-          <View style={styles.rowContainer}>
+        <View style={styles.content}>
+          <View style={[styles.form, isDarkMode && styles.formDark]}>
             <TextInput
-              style={[styles.inputHalf, isDarkMode && styles.inputDark]}
-              placeholder="Técnico"
+              style={[styles.input, isDarkMode && styles.inputDark]}
+              placeholder="N° da OS"
               placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-              value={technician}
-              onChangeText={setTechnician}
+              keyboardType="numeric"
+              value={osNumber}
+              onChangeText={setOsNumber}
             />
             
-            <TextInput
-              style={[styles.inputHalf, isDarkMode && styles.inputDark]}
-              placeholder="Cliente"
-              placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-              value={client}
-              onChangeText={setClient}
-            />
-          </View>
-          
-          <View style={styles.productListHeader}>
-            <Text style={[styles.productListTitle, isDarkMode && styles.textDark]}>Produtos</Text>
-            <TouchableOpacity 
-              style={[styles.addButton, { backgroundColor: primaryColor }]}
-              onPress={adicionarProduto}
-            >
-              <Ionicons name="add" size={20} color="#fff" />
-              <Text style={styles.addButtonText}>Adicionar</Text>
-            </TouchableOpacity>
-          </View>
-          
-          {selectedProducts.length === 0 ? (
-            <Text style={[styles.emptyText, isDarkMode && styles.textDark]}>Nenhum produto adicionado</Text>
-          ) : (
-            <View style={styles.productList}>
-              {selectedProducts.map((produto, index) => (
-                <View key={index} style={[styles.productItem, isDarkMode && styles.productItemDark]}>
-                  <View style={styles.productSelectContainer}>
-                    <View style={styles.productSelect}>
-                      <Text style={[styles.productSelectLabel, isDarkMode && styles.textDark]}>Produto:</Text>
-                      <View style={[styles.selectWrapper, isDarkMode && styles.selectWrapperDark]}>
-                        <Picker
-                          selectedValue={produto.id}
-                          onValueChange={(itemValue) => atualizarProdutoSelecionado(index, itemValue)}
-                          style={[styles.picker, isDarkMode && styles.pickerDark]}
-                        >
-                          <Picker.Item label="Selecione um produto" value="" />
-                          {produtosEstoque.map((p) => (
-                            <Picker.Item 
-                              key={p.id} 
-                              label={`${p.nome} (${p.quantidade} em estoque)`} 
-                              value={p.id} 
-                            />
-                          ))}
-                        </Picker>
+            <View style={styles.rowContainer}>
+              <TextInput
+                style={[styles.inputHalf, isDarkMode && styles.inputDark]}
+                placeholder="Técnico"
+                placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
+                value={technician}
+                onChangeText={setTechnician}
+              />
+              
+              <TextInput
+                style={[styles.inputHalf, isDarkMode && styles.inputDark]}
+                placeholder="Cliente"
+                placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
+                value={client}
+                onChangeText={setClient}
+              />
+            </View>
+            
+            <View style={styles.productListHeader}>
+              <Text style={[styles.productListTitle, isDarkMode && styles.textDark]}>Produtos</Text>
+              <TouchableOpacity 
+                style={[styles.addButton, { backgroundColor: primaryColor }]}
+                onPress={adicionarProduto}
+              >
+                <Ionicons name="add" size={20} color="#fff" />
+                <Text style={styles.addButtonText}>Adicionar</Text>
+              </TouchableOpacity>
+            </View>
+            
+            {selectedProducts.length === 0 ? (
+              <Text style={[styles.emptyText, isDarkMode && styles.textDark]}>Nenhum produto adicionado</Text>
+            ) : (
+              <View style={styles.productList}>
+                {selectedProducts.map((produto, index) => (
+                  <View key={index} style={[styles.productItem, isDarkMode && styles.productItemDark]}>
+                    <View style={styles.productSelectContainer}>
+                      <View style={styles.productSelect}>
+                        <Text style={[styles.productSelectLabel, isDarkMode && styles.textDark]}>Produto:</Text>
+                        <View style={[styles.selectWrapper, isDarkMode && styles.selectWrapperDark]}>
+                          <Picker
+                            selectedValue={produto.id}
+                            onValueChange={(itemValue) => atualizarProdutoSelecionado(index, itemValue)}
+                            style={[styles.picker, isDarkMode && styles.pickerDark]}
+                          >
+                            <Picker.Item label="Selecione um produto" value="" />
+                            {produtosEstoque.map((p) => (
+                              <Picker.Item 
+                                key={p.id} 
+                                label={`${p.nome} (${p.quantidade} em estoque)`} 
+                                value={p.id} 
+                              />
+                            ))}
+                          </Picker>
+                        </View>
+                      </View>
+                      
+                      <View style={styles.quantityContainer}>
+                        <Text style={[styles.quantityLabel, isDarkMode && styles.textDark]}>Qtd:</Text>
+                        <TextInput 
+                          style={[styles.quantityInput, isDarkMode && styles.inputDark]}
+                          placeholder="Qtd"
+                          placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
+                          keyboardType="numeric"
+                          value={produto.quantidade}
+                          onChangeText={(value) => atualizarQuantidade(index, value)}
+                        />
                       </View>
                     </View>
                     
-                    <View style={styles.quantityContainer}>
-                      <Text style={[styles.quantityLabel, isDarkMode && styles.textDark]}>Qtd:</Text>
-                      <TextInput 
-                        style={[styles.quantityInput, isDarkMode && styles.inputDark]}
-                        placeholder="Qtd"
-                        placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-                        keyboardType="numeric"
-                        value={produto.quantidade}
-                        onChangeText={(value) => atualizarQuantidade(index, value)}
-                      />
-                    </View>
-                  </View>
-                  
-                  <TouchableOpacity 
-                    style={styles.removeButton}
-                    onPress={() => removerProduto(index)}
-                  >
-                    <Ionicons name="trash-outline" size={20} color="#ff4d4d" />
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </View>
-          )}
-        </View>
-
-        <TouchableOpacity 
-          style={[styles.registerButton, { backgroundColor: primaryColor }]}
-          onPress={registrarSaida}
-        >
-          <Text style={styles.buttonText}>Registrar Saída</Text>
-        </TouchableOpacity>
-        
-        <View style={styles.historicoContainer}>
-          <Text style={[styles.historicoTitle, isDarkMode && styles.textDark]}>Histórico de Saídas</Text>
-          
-          {historicoSaidas.map((saida) => (
-            <View key={saida.id} style={[styles.historicoItem, isDarkMode && styles.historicoItemDark]}>
-              <View style={styles.itemHeader}>
-                <Text style={[styles.itemOS, isDarkMode && styles.textDark]}>OS: {saida.numeroOS}</Text>
-                <Text style={[styles.itemData, isDarkMode && styles.textDark]}>{saida.dataSaida}</Text>
-              </View>
-              
-              <View style={[styles.itemDetails, isDarkMode && styles.itemDetailsDark]}>
-                <View style={styles.detailRow}>
-                  <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Cliente:</Text>
-                  <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{saida.cliente}</Text>
-                </View>
-                
-                <View style={styles.detailRow}>
-                  <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Técnico:</Text>
-                  <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{saida.tecnico}</Text>
-                </View>
-                
-                <Text style={[styles.itemsTitle, isDarkMode && styles.textDark]}>Itens:</Text>
-                
-                {saida.itens.map((item, index) => (
-                  <View key={index} style={styles.itemRow}>
-                    <Text style={[styles.itemName, isDarkMode && styles.textDark]}>
-                      {item.quantidade}x {item.nome}
-                    </Text>
-                    <Text style={[styles.itemPrice, isDarkMode && styles.textDark]}>
-                      {formatarMoeda(item.quantidade * item.precoUnitario)}
-                    </Text>
+                    <TouchableOpacity 
+                      style={styles.removeButton}
+                      onPress={() => removerProduto(index)}
+                    >
+                      <Ionicons name="trash-outline" size={20} color="#ff4d4d" />
+                    </TouchableOpacity>
                   </View>
                 ))}
+              </View>
+            )}
+          </View>
+
+          <TouchableOpacity 
+            style={[styles.registerButton, { backgroundColor: primaryColor }]}
+            onPress={registrarSaida}
+          >
+            <Text style={styles.buttonText}>Registrar Saída</Text>
+          </TouchableOpacity>
+          
+          <View style={styles.historicoContainer}>
+            <Text style={[styles.historicoTitle, isDarkMode && styles.textDark]}>Histórico de Saídas</Text>
+            
+            {historicoSaidas.map((saida) => (
+              <View key={saida.id} style={[styles.historicoItem, isDarkMode && styles.historicoItemDark]}>
+                <View style={styles.itemHeader}>
+                  <Text style={[styles.itemOS, isDarkMode && styles.textDark]}>OS: {saida.numeroOS}</Text>
+                  <Text style={[styles.itemData, isDarkMode && styles.textDark]}>{saida.dataSaida}</Text>
+                </View>
                 
-                <View style={styles.totalRow}>
-                  <Text style={[styles.totalLabel, isDarkMode && styles.textDark]}>Total:</Text>
-                  <Text style={[styles.totalValue, isDarkMode && styles.textDark]}>
-                    {formatarMoeda(calcularTotal(saida.itens))}
-                  </Text>
+                <View style={[styles.itemDetails, isDarkMode && styles.itemDetailsDark]}>
+                  <View style={styles.detailRow}>
+                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Cliente:</Text>
+                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{saida.cliente}</Text>
+                  </View>
+                  
+                  <View style={styles.detailRow}>
+                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Técnico:</Text>
+                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{saida.tecnico}</Text>
+                  </View>
+                  
+                  <Text style={[styles.itemsTitle, isDarkMode && styles.textDark]}>Itens:</Text>
+                  
+                  {saida.itens.map((item, index) => (
+                    <View key={index} style={styles.itemRow}>
+                      <Text style={[styles.itemName, isDarkMode && styles.textDark]}>
+                        {item.quantidade}x {item.nome}
+                      </Text>
+                      <Text style={[styles.itemPrice, isDarkMode && styles.textDark]}>
+                        {formatarMoeda(item.quantidade * item.precoUnitario)}
+                      </Text>
+                    </View>
+                  ))}
+                  
+                  <View style={styles.totalRow}>
+                    <Text style={[styles.totalLabel, isDarkMode && styles.textDark]}>Total:</Text>
+                    <Text style={[styles.totalValue, isDarkMode && styles.textDark]}>
+                      {formatarMoeda(calcularTotal(saida.itens))}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
-          ))}
+            ))}
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -337,11 +337,13 @@ export default function SaidaScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: colors.lightGray
   },
   containerDark: {
     backgroundColor: '#121212',
+  },
+  content: {
+    padding: 20
   },
   header: {
     flexDirection: 'row',

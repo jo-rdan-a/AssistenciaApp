@@ -1,7 +1,7 @@
 import Icon from '@expo/vector-icons/MaterialIcons';
-import { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView, Alert, KeyboardAvoidingView, Platform, FlatList } from 'react-native';
 import { router } from 'expo-router';
+import { useState } from 'react';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useTheme } from '../../contexts/ThemeContext';
 import colors from './styles/colors';
 
@@ -118,132 +118,134 @@ export default function EntradaScreen() {
       </View>
       
       <ScrollView style={styles.scrollView}>
-        <View style={[styles.form, isDarkMode && styles.formDark]}>
-          <TextInput
-            style={[styles.input, isDarkMode && styles.inputDark]}
-            placeholder="Código do Produto"
-            placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-            value={productCode}
-            onChangeText={setProductCode}
-          />
-          
-          <TextInput
-            style={[styles.input, isDarkMode && styles.inputDark]}
-            placeholder="Nome do Produto"
-            placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-            value={productName}
-            onChangeText={setProductName}
-          />
-          
-          <View style={styles.rowContainer}>
+        <View style={styles.content}>
+          <View style={[styles.form, isDarkMode && styles.formDark]}>
             <TextInput
-              style={[styles.inputHalf, isDarkMode && styles.inputDark]}
-              placeholder="Quantidade"
+              style={[styles.input, isDarkMode && styles.inputDark]}
+              placeholder="Código do Produto"
               placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-              keyboardType="numeric"
-              value={quantity}
-              onChangeText={setQuantity}
+              value={productCode}
+              onChangeText={setProductCode}
             />
             
             <TextInput
-              style={[styles.inputHalf, isDarkMode && styles.inputDark]}
-              placeholder="Preço Unitário (R$)"
+              style={[styles.input, isDarkMode && styles.inputDark]}
+              placeholder="Nome do Produto"
               placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-              keyboardType="numeric"
-              value={price}
-              onChangeText={setPrice}
-            />
-          </View>
-
-          <TextInput
-            style={[styles.input, isDarkMode && styles.inputDark]}
-            placeholder="Fornecedor"
-            placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-            value={supplier}
-            onChangeText={setSupplier}
-          />
-          
-          <View style={styles.rowContainer}>
-            <TextInput
-              style={[styles.inputHalf, isDarkMode && styles.inputDark]}
-              placeholder="Categoria"
-              placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-              value={category}
-              onChangeText={setCategory}
+              value={productName}
+              onChangeText={setProductName}
             />
             
-            <TextInput
-              style={[styles.inputHalf, isDarkMode && styles.inputDark]}
-              placeholder="Nota Fiscal"
-              placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-              value={invoice}
-              onChangeText={setInvoice}
-            />
-          </View>
-
-          <TouchableOpacity style={[styles.scanButton, { borderColor: primaryColor }]}>
-            <Icon name="qr-code-scanner" size={24} color={primaryColor} />
-            <Text style={[styles.scanText, { color: primaryColor }]}>Escanear Código</Text>
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity 
-          style={[styles.registerButton, { backgroundColor: primaryColor }]}
-          onPress={registrarEntrada}
-        >
-          <Text style={styles.buttonText}>Registrar Entrada</Text>
-        </TouchableOpacity>
-        
-        <View style={styles.historicoContainer}>
-          <Text style={[styles.historicoTitle, isDarkMode && styles.textDark]}>Histórico de Entradas</Text>
-          
-          {historico.map((item) => (
-            <View key={item.id} style={[styles.historicoItem, isDarkMode && styles.historicoItemDark]}>
-              <View style={styles.itemHeader}>
-                <Text style={[styles.itemNome, isDarkMode && styles.textDark]}>{item.nome}</Text>
-                <Text style={[styles.itemData, isDarkMode && styles.textDark]}>{item.dataEntrada}</Text>
-              </View>
+            <View style={styles.rowContainer}>
+              <TextInput
+                style={[styles.inputHalf, isDarkMode && styles.inputDark]}
+                placeholder="Quantidade"
+                placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
+                keyboardType="numeric"
+                value={quantity}
+                onChangeText={setQuantity}
+              />
               
-              <View style={[styles.itemDetails, isDarkMode && styles.itemDetailsDark]}>
-                <View style={styles.detailRow}>
-                  <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Código:</Text>
-                  <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.codigo}</Text>
+              <TextInput
+                style={[styles.inputHalf, isDarkMode && styles.inputDark]}
+                placeholder="Preço Unitário (R$)"
+                placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
+                keyboardType="numeric"
+                value={price}
+                onChangeText={setPrice}
+              />
+            </View>
+
+            <TextInput
+              style={[styles.input, isDarkMode && styles.inputDark]}
+              placeholder="Fornecedor"
+              placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
+              value={supplier}
+              onChangeText={setSupplier}
+            />
+            
+            <View style={styles.rowContainer}>
+              <TextInput
+                style={[styles.inputHalf, isDarkMode && styles.inputDark]}
+                placeholder="Categoria"
+                placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
+                value={category}
+                onChangeText={setCategory}
+              />
+              
+              <TextInput
+                style={[styles.inputHalf, isDarkMode && styles.inputDark]}
+                placeholder="Nota Fiscal"
+                placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
+                value={invoice}
+                onChangeText={setInvoice}
+              />
+            </View>
+
+            <TouchableOpacity style={[styles.scanButton, { borderColor: primaryColor }]}>
+              <Icon name="qr-code-scanner" size={24} color={primaryColor} />
+              <Text style={[styles.scanText, { color: primaryColor }]}>Escanear Código</Text>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity 
+            style={[styles.registerButton, { backgroundColor: primaryColor }]}
+            onPress={registrarEntrada}
+          >
+            <Text style={styles.buttonText}>Registrar Entrada</Text>
+          </TouchableOpacity>
+          
+          <View style={styles.historicoContainer}>
+            <Text style={[styles.historicoTitle, isDarkMode && styles.textDark]}>Histórico de Entradas</Text>
+            
+            {historico.map((item) => (
+              <View key={item.id} style={[styles.historicoItem, isDarkMode && styles.historicoItemDark]}>
+                <View style={styles.itemHeader}>
+                  <Text style={[styles.itemNome, isDarkMode && styles.textDark]}>{item.nome}</Text>
+                  <Text style={[styles.itemData, isDarkMode && styles.textDark]}>{item.dataEntrada}</Text>
                 </View>
                 
-                <View style={styles.detailRow}>
-                  <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Quantidade:</Text>
-                  <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.quantidade}</Text>
-                </View>
-                
-                <View style={styles.detailRow}>
-                  <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Preço Unit.:</Text>
-                  <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{formatarMoeda(item.precoUnitario)}</Text>
-                </View>
-                
-                <View style={styles.detailRow}>
-                  <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Total:</Text>
-                  <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>
-                    {formatarMoeda(item.quantidade * item.precoUnitario)}
-                  </Text>
-                </View>
-                
-                <View style={styles.detailRow}>
-                  <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Fornecedor:</Text>
-                  <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.fornecedor}</Text>
-                </View>
-                
-                <View style={styles.detailRow}>
-                  <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Categoria:</Text>
-                  <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.categoria}</Text>
-                </View>
-                
-                <View style={styles.detailRow}>
-                  <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Nota Fiscal:</Text>
-                  <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.notaFiscal}</Text>
+                <View style={[styles.itemDetails, isDarkMode && styles.itemDetailsDark]}>
+                  <View style={styles.detailRow}>
+                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Código:</Text>
+                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.codigo}</Text>
+                  </View>
+                  
+                  <View style={styles.detailRow}>
+                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Quantidade:</Text>
+                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.quantidade}</Text>
+                  </View>
+                  
+                  <View style={styles.detailRow}>
+                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Preço Unit.:</Text>
+                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{formatarMoeda(item.precoUnitario)}</Text>
+                  </View>
+                  
+                  <View style={styles.detailRow}>
+                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Total:</Text>
+                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>
+                      {formatarMoeda(item.quantidade * item.precoUnitario)}
+                    </Text>
+                  </View>
+                  
+                  <View style={styles.detailRow}>
+                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Fornecedor:</Text>
+                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.fornecedor}</Text>
+                  </View>
+                  
+                  <View style={styles.detailRow}>
+                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Categoria:</Text>
+                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.categoria}</Text>
+                  </View>
+                  
+                  <View style={styles.detailRow}>
+                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Nota Fiscal:</Text>
+                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.notaFiscal}</Text>
+                  </View>
                 </View>
               </View>
-            </View>
-          ))}
+            ))}
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -253,7 +255,6 @@ export default function EntradaScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: colors.lightGray
   },
   containerDark: {
@@ -292,6 +293,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+  },
+  content: {
+    padding: 20,
   },
   form: {
     backgroundColor: colors.white,
