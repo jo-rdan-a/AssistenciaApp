@@ -1,13 +1,18 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
+<<<<<<< HEAD
 import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { FirebaseService, FirebaseUser } from '../../config/firebaseService';
+=======
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+>>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
 import { useTheme } from '../../contexts/ThemeContext';
 import colors from './styles/colors';
 
 const AdminDashboard = () => {
   const { isDarkMode, primaryColor } = useTheme();
+<<<<<<< HEAD
   const [userData, setUserData] = useState<FirebaseUser | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -33,6 +38,8 @@ const AdminDashboard = () => {
       </View>
     );
   }
+=======
+>>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
   
   return (
     <View style={[styles.container, isDarkMode && styles.containerDark]}>
@@ -40,9 +47,13 @@ const AdminDashboard = () => {
         {/* Cabeçalho dentro do ScrollView, alinhado */}
           <View style={[styles.headerRow, isDarkMode && styles.headerRowDark]}>
             <View style={styles.headerLeft}>
+<<<<<<< HEAD
               <Text style={[styles.sectionTitle, {color: primaryColor}]}>
                 Olá, {userData?.userData?.nome?.split(' ')[0] || userData?.displayName?.split(' ')[0] || 'Usuário'}
               </Text>
+=======
+              <Text style={[styles.headerTitle, {color: primaryColor}]}>Assistência App</Text>
+>>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
             </View>
             <TouchableOpacity 
               style={[styles.profileButton, isDarkMode && styles.profileButtonDark]}
@@ -291,6 +302,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
   },
+<<<<<<< HEAD
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -300,6 +312,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
+=======
+>>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
 });
 
 export default AdminDashboard;

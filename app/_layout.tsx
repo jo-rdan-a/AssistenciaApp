@@ -29,9 +29,12 @@ export default function RootLayout() {
         <Stack.Screen name="src/orcamentoScreen" />
         <Stack.Screen name="src/clientesScreen" />
         <Stack.Screen name="src/perfilScreen" />
+<<<<<<< HEAD
         <Stack.Screen name="src/homeScreen" />
         <Stack.Screen name="src/descricoesScreen" />
         <Stack.Screen name="src/novaDescricaoScreen" />
+=======
+>>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
         <Stack.Screen name="src/configuracoesScreen" />
         <Stack.Screen name="+not-found" />
       </Stack>

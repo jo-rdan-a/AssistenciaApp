@@ -1,7 +1,11 @@
 import Icon from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
 import { useState } from 'react';
+<<<<<<< HEAD
 import { Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+=======
+import { Alert, FlatList, Linking, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+>>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
 import { useTheme } from '../../contexts/ThemeContext';
 import colors from './styles/colors';
 
