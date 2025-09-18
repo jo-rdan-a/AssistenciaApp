@@ -1,15 +1,10 @@
 import Icon from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
-<<<<<<< HEAD
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { auth, db } from '../../config/firebase';
-=======
-import { useState } from 'react';
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View, ScrollView } from 'react-native';
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
 import colors from './styles/colors';
 
 export default function CadastroScreen() {
@@ -20,7 +15,6 @@ export default function CadastroScreen() {
   const [telefone, setTelefone] = useState('');
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
-<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
 
   const isDisabled = nome.trim() === '' || email.trim() === '' || senha.trim() === '' || confirmarSenha.trim() === '' || telefone.trim() === '' || loading;
@@ -28,18 +22,11 @@ export default function CadastroScreen() {
   const handleCadastro = async () => {
     if (isDisabled) return;
 
-=======
-
-  const isDisabled = nome.trim() === '' || email.trim() === '' || senha.trim() === '' || confirmarSenha.trim() === '' || telefone.trim() === '';
-
-  const handleCadastro = () => {
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
     if (senha !== confirmarSenha) {
       Alert.alert('Erro', 'As senhas não coincidem!');
       return;
     }
 
-<<<<<<< HEAD
     if (senha.length < 6) {
       Alert.alert('Erro', 'A senha deve ter pelo menos 6 caracteres!');
       return;
@@ -76,12 +63,6 @@ export default function CadastroScreen() {
     } finally {
       setLoading(false);
     }
-=======
-    // Aqui seria implementada a lógica de cadastro com API
-    Alert.alert('Sucesso', 'Cadastro realizado com sucesso!', [
-      { text: 'OK', onPress: () => router.push('/src/loginScreen') }
-    ]);
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
   };
 
   return (
@@ -175,15 +156,11 @@ export default function CadastroScreen() {
         disabled={isDisabled}
         onPress={handleCadastro}
       >
-<<<<<<< HEAD
         {loading ? (
           <ActivityIndicator color="white" />
         ) : (
           <Text style={styles.buttonText}>Cadastrar</Text>
         )}
-=======
-        <Text style={styles.buttonText}>Cadastrar</Text>
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
       </TouchableOpacity>
 
       {/* Botão de Voltar para Login */}
@@ -229,10 +206,10 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: colors.lightGray,
+    borderColor: colors.white,
     borderWidth: 1,
     borderRadius: 8,
-    backgroundColor: colors.lightGray,
+    backgroundColor: colors.white,
     marginBottom: 15,
     paddingRight: 10,
   },

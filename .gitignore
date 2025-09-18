@@ -1,7 +1,8 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-.gitignore
 
-# dependencies
+
+
+expo-env.d.ts
+
 node_modules/
 
 # Expo
@@ -33,11 +34,11 @@ yarn-error.*
 
 # local env files
 .env*.local
+.env
 
 # typescript
 *.tsbuildinfo
 
 app-example
 
-/config/firebase.ts
-/config/firebaseService.ts
+/services/firebase.ts

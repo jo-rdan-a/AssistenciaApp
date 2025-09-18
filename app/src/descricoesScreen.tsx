@@ -2,17 +2,16 @@ import Icon from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import {
-    ActivityIndicator,
-    Alert,
-    FlatList,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { useCategorias, useDescricoes } from '../../hooks/useDescricoes';
-import { DescricaoServico } from '../../services/descricaoService';
 import colors from './styles/colors';
 
 export default function DescricoesScreen() {

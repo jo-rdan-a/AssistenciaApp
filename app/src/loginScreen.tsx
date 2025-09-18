@@ -1,20 +1,14 @@
 import Icon from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
-<<<<<<< HEAD
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useState } from 'react';
 import { ActivityIndicator, Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { auth } from '../../config/firebase';
-=======
-import { useState } from 'react';
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
 import colors from './styles/colors';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
 
   const isDisabled = email.trim() === '' || senha.trim() === '' || loading;
@@ -40,20 +34,6 @@ export default function LoginScreen() {
       Alert.alert('Erro', msg);
     } finally {
       setLoading(false);
-=======
-
-  const isDisabled = email.trim() === '' || senha.trim() === '';
-
-  const handleLogin = () => {
-    // Credenciais fixas para teste
-    const validEmail = 'admin@admin.com';
-    const validPassword = '123456';
-    
-    if (email === validEmail && senha === validPassword) {
-      router.push('/src/adminDashboard');
-    } else {
-      Alert.alert('Erro', 'Email ou senha incorretos!');
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
     }
   };
 
@@ -108,15 +88,11 @@ export default function LoginScreen() {
           disabled={isDisabled}
           onPress={handleLogin}
         >
-<<<<<<< HEAD
           {loading ? (
             <ActivityIndicator color="white" />
           ) : (
             <Text style={styles.buttonText}>Entrar</Text>
           )}
-=======
-          <Text style={styles.buttonText}>Entrar</Text>
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
         </TouchableOpacity>
 
         {/* Botão de Criar conta */}
@@ -164,10 +140,10 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: colors.lightGray,
+    borderColor: colors.white,
     borderWidth: 1,
     borderRadius: 8,
-    backgroundColor: colors.lightGray,
+    backgroundColor: colors.white,
     marginBottom: 15,
     paddingRight: 10,
   },

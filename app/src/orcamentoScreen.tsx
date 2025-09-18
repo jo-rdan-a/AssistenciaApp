@@ -2,6 +2,7 @@ import Icon from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useData } from '../../contexts/DataContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import colors from './styles/colors';
 
@@ -13,40 +14,26 @@ interface Orcamento {
   valor: number;
   status: 'Pendente' | 'Aprovado' | 'Recusado';
   data: string;
+  tecnico: string;
 }
 
 export default function OrcamentoScreen() {
   const { isDarkMode, primaryColor } = useTheme();
+  const { atendimentos, updateAtendimento, loading } = useData();
   const [busca, setBusca] = useState('');
-  const [orcamentos, setOrcamentos] = useState<Orcamento[]>([
-    {
-      id: '1',
-      cliente: 'João Silva',
-      equipamento: 'Notebook Dell',
-      descricao: 'Troca de tela + formatação',
-      valor: 450.00,
-      status: 'Pendente',
-      data: '10/06/2023'
-    },
-    {
-      id: '2',
-      cliente: 'Maria Santos',
-      equipamento: 'Impressora HP',
-      descricao: 'Limpeza de cabeçote + troca de engrenagem',
-      valor: 180.00,
-      status: 'Aprovado',
-      data: '12/06/2023'
-    },
-    {
-      id: '3',
-      cliente: 'Pedro Almeida',
-      equipamento: 'Smartphone Samsung',
-      descricao: 'Troca de tela + bateria',
-      valor: 350.00,
-      status: 'Recusado',
-      data: '08/06/2023'
-    },
-  ]);
+  
+  const orcamentos = atendimentos
+    .filter(atendimento => atendimento.valorServico && atendimento.valorServico > 0) // Apenas atendimentos com valor
+    .map(atendimento => ({
+      id: atendimento.id,
+      cliente: atendimento.clienteNome,
+      equipamento: atendimento.equipamentoNome,
+      descricao: atendimento.problema,
+      valor: atendimento.valorServico || 0,
+      status: atendimento.status === 'Concluído' ? 'Aprovado' : atendimento.status === 'Recusado' ? 'Recusado' : 'Pendente',
+      data: atendimento.data,
+      tecnico: atendimento.tecnico,
+    }));
 
   const orcamentosFiltrados = orcamentos.filter(item => 
     item.cliente.toLowerCase().includes(busca.toLowerCase()) ||
@@ -70,24 +57,37 @@ export default function OrcamentoScreen() {
     });
   };
 
-  const handleNovoOrcamento = () => {
-    Alert.alert('Novo Orçamento', 'Funcionalidade em desenvolvimento');
-    // Aqui seria implementada a navegação para a tela de novo orçamento
-  };
-
-  const handleEditarOrcamento = (id: string) => {
-    Alert.alert('Editar Orçamento', `Editar orçamento ${id}`);
-    // Aqui seria implementada a navegação para a tela de edição de orçamento
-  };
-
-  const handleAprovarOrcamento = (id: string) => {
-    Alert.alert('Aprovar Orçamento', `Orçamento ${id} aprovado com sucesso!`);
-    // Aqui seria implementada a lógica para aprovar o orçamento
-  };
-
   const isOrcamentoAltoValor = (valor: number) => {
-    return valor > 300; // Considera alto valor orçamentos acima de R$ 300,00
+    return valor > 300;
   };
+
+  const handleAprovarOrcamento = async (id: string) => {
+    try {
+      await updateAtendimento(id, { status: 'Concluído' });
+      Alert.alert('Sucesso', 'Orçamento aprovado e atendimento concluído!');
+    } catch (err) {
+      Alert.alert('Erro', err instanceof Error ? err.message : 'Erro ao aprovar orçamento');
+    }
+  };
+
+  const handleRecusarOrcamento = async (id: string) => {
+    try {
+      await updateAtendimento(id, { status: 'Recusado' });
+      Alert.alert('Sucesso', 'Orçamento recusado!');
+    } catch (err) {
+      Alert.alert('Erro', err instanceof Error ? err.message : 'Erro ao recusar orçamento');
+    }
+  };
+  
+  // Seus botões de "Novo Orçamento" e "Editar Orçamento" não farão mais nada, já que a lógica agora é puxar de atendimentos.
+  const handleNovoOrcamento = () => {
+    Alert.alert('Novo Orçamento', 'Crie um novo atendimento para gerar um orçamento.');
+  };
+
+  const handleEditarOrcamento = () => {
+    Alert.alert('Editar Orçamento', 'Edite o atendimento correspondente para alterar o orçamento.');
+  };
+
 
   return (
     <View style={[styles.container, isDarkMode && styles.containerDark]}>
@@ -118,7 +118,7 @@ export default function OrcamentoScreen() {
         renderItem={({ item }) => (
           <TouchableOpacity 
             style={[styles.card, isDarkMode && styles.cardDark]}
-            onPress={() => handleEditarOrcamento(item.id)}
+            onPress={() => handleEditarOrcamento()}
           >
             <View style={styles.cardHeader}>
               <Text style={[styles.clienteName, isDarkMode && styles.textDark]}>{item.cliente}</Text>
@@ -136,18 +136,28 @@ export default function OrcamentoScreen() {
             <View style={styles.cardBody}>
               <Text style={[styles.equipamento, isDarkMode && styles.textDark]}><Text style={[styles.label, isDarkMode && styles.labelDark]}>Equipamento:</Text> {item.equipamento}</Text>
               <Text style={[styles.descricao, isDarkMode && styles.textDark]}><Text style={[styles.label, isDarkMode && styles.labelDark]}>Descrição:</Text> {item.descricao}</Text>
+              <Text style={[styles.tecnico, isDarkMode && styles.textDark]}><Text style={[styles.label, isDarkMode && styles.labelDark]}>Técnico:</Text> {item.tecnico}</Text>
               <View style={styles.cardFooter}>
                 <Text style={[styles.data, isDarkMode && styles.textDark]}><Text style={[styles.label, isDarkMode && styles.labelDark]}>Data:</Text> {item.data}</Text>
                 <Text style={[styles.valor, isDarkMode && styles.valorDark]}>{formatarValor(item.valor)}</Text>
               </View>
               {item.status === 'Pendente' && (
-                <TouchableOpacity 
-                  style={[styles.approveButton, isDarkMode && styles.approveButtonDark]} 
-                  onPress={() => handleAprovarOrcamento(item.id)}
-                >
-                  <Icon name="check-circle" size={16} color={isDarkMode ? '#121212' : colors.white} />
-                  <Text style={[styles.approveButtonText, isDarkMode && styles.approveButtonTextDark]}>Aprovar Orçamento</Text>
-                </TouchableOpacity>
+                <View style={styles.actionButtons}>
+                  <TouchableOpacity 
+                    style={[styles.approveButton, isDarkMode && styles.approveButtonDark, { flex: 1 }]} 
+                    onPress={() => handleAprovarOrcamento(item.id)}
+                  >
+                    <Icon name="check-circle" size={16} color={isDarkMode ? '#121212' : colors.white} />
+                    <Text style={[styles.approveButtonText, isDarkMode && styles.approveButtonTextDark]}>Aprovar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    style={[styles.declineButton, isDarkMode && styles.declineButtonDark, { flex: 1 }]} 
+                    onPress={() => handleRecusarOrcamento(item.id)}
+                  >
+                    <Icon name="cancel" size={16} color={isDarkMode ? '#121212' : colors.white} />
+                    <Text style={[styles.declineButtonText, isDarkMode && styles.declineButtonTextDark]}>Recusar</Text>
+                  </TouchableOpacity>
+                </View>
               )}
             </View>
           </TouchableOpacity>
@@ -202,10 +212,11 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.lightGray,
+    backgroundColor: colors.white,
     borderRadius: 8,
     margin: 16,
     paddingHorizontal: 12,
+    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
   },
   searchContainerDark: {
     backgroundColor: '#1E1E1E',
@@ -289,6 +300,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
   },
+  tecnico: {
+    fontSize: 14,
+    color: '#333',
+  },
   data: {
     fontSize: 14,
     color: '#333',
@@ -326,6 +341,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 'bold',
   },
+  actionButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    gap: 10,
+  },
   approveButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -334,7 +355,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 4,
-    marginTop: 8,
+    flex: 1,
     gap: 8,
   },
   approveButtonDark: {
@@ -346,6 +367,28 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   approveButtonTextDark: {
+    color: '#121212',
+  },
+  declineButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#F44336',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 4,
+    flex: 1,
+    gap: 8,
+  },
+  declineButtonDark: {
+    backgroundColor: '#E57373',
+  },
+  declineButtonText: {
+    color: colors.white,
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  declineButtonTextDark: {
     color: '#121212',
   },
 });

@@ -1,98 +1,66 @@
 import Icon from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, FlatList, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Cliente, useData } from '../../contexts/DataContext';
 import { useTheme } from '../../contexts/ThemeContext';
 import colors from './styles/colors';
 
-type EntradaItem = {
-  id: string;
-  codigo: string;
-  nome: string;
-  quantidade: number;
-  precoUnitario: number;
-  fornecedor: string;
-  dataEntrada: string;
-  categoria: string;
-  notaFiscal: string;
-};
 
 export default function EntradaScreen() {
   const { primaryColor, isDarkMode } = useTheme();
+  const { clientes, equipamentos, addEquipamento, loading, error } = useData();
+  const [selectedCliente, setSelectedCliente] = useState<Cliente | null>(null);
   const [productCode, setProductCode] = useState('');
   const [productName, setProductName] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [price, setPrice] = useState('');
-  const [supplier, setSupplier] = useState('');
+  const [marca, setMarca] = useState('');
+  const [modelo, setModelo] = useState('');
   const [category, setCategory] = useState('');
-  const [invoice, setInvoice] = useState('');
-  const [historico, setHistorico] = useState<EntradaItem[]>([
-    {
-      id: '1',
-      codigo: 'LCD-IP11',
-      nome: 'Tela LCD iPhone 11',
-      quantidade: 5,
-      precoUnitario: 250.00,
-      fornecedor: 'TechParts Ltda',
-      dataEntrada: '15/05/2023',
-      categoria: 'Peças',
-      notaFiscal: 'NF-12345'
-    },
-    {
-      id: '2',
-      codigo: 'BAT-S20',
-      nome: 'Bateria Samsung S20',
-      quantidade: 10,
-      precoUnitario: 120.00,
-      fornecedor: 'BatteryMax',
-      dataEntrada: '10/05/2023',
-      categoria: 'Peças',
-      notaFiscal: 'NF-12346'
-    },
-    {
-      id: '3',
-      codigo: 'KIT-FERR',
-      nome: 'Kit Ferramentas Precisão',
-      quantidade: 2,
-      precoUnitario: 180.00,
-      fornecedor: 'ToolMaster',
-      dataEntrada: '05/05/2023',
-      categoria: 'Ferramentas',
-      notaFiscal: 'NF-12347'
-    }
-  ]);
+  const [observacoes, setObservacoes] = useState('');
+  const [modalClienteVisible, setModalClienteVisible] = useState(false);
   
-  const registrarEntrada = () => {
-    if (!productCode || !productName || !quantity || !price || !supplier || !category) {
+  const registrarEquipamento = async () => {
+    if (!selectedCliente) {
+      Alert.alert('Erro', 'Por favor, selecione um cliente');
+      return;
+    }
+
+    if (!productCode || !productName || !marca || !modelo || !category) {
       Alert.alert('Erro', 'Por favor, preencha todos os campos obrigatórios');
       return;
     }
 
-    const novaEntrada: EntradaItem = {
-      id: Date.now().toString(),
-      codigo: productCode,
-      nome: productName,
-      quantidade: Number(quantity),
-      precoUnitario: Number(price),
-      fornecedor: supplier,
-      dataEntrada: new Date().toLocaleDateString('pt-BR'),
-      categoria: category,
-      notaFiscal: invoice || 'N/A'
-    };
+    try {
+      await addEquipamento({
+        codigo: productCode,
+        nome: productName,
+        marca: marca,
+        modelo: modelo,
+        clienteId: selectedCliente.id,
+        categoria: category,
+        observacoes: observacoes
+      });
 
-    setHistorico([novaEntrada, ...historico]);
-    limparFormulario();
-    Alert.alert('Sucesso', 'Entrada registrada com sucesso!');
+      limparFormulario();
+      Alert.alert('Sucesso', 'Equipamento cadastrado com sucesso!');
+    } catch (err) {
+      Alert.alert('Erro', err instanceof Error ? err.message : 'Erro ao cadastrar equipamento');
+    }
   };
 
   const limparFormulario = () => {
+    setSelectedCliente(null);
     setProductCode('');
     setProductName('');
-    setQuantity('');
-    setPrice('');
-    setSupplier('');
+    setMarca('');
+    setModelo('');
     setCategory('');
-    setInvoice('');
+    setObservacoes('');
+  };
+
+  const handleSelecionarCliente = (cliente: Cliente) => {
+    setSelectedCliente(cliente);
+    setModalClienteVisible(false);
   };
 
   const formatarMoeda = (valor: number) => {
@@ -111,7 +79,7 @@ export default function EntradaScreen() {
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={primaryColor} />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: primaryColor}]}>Controle de entradas</Text>
+        <Text style={[styles.headerTitle, {color: primaryColor}]}>Cadastro de Equipamentos</Text>
         <TouchableOpacity style={styles.addButton}>
           <Icon name="add" size={24} color={primaryColor} />
         </TouchableOpacity>
@@ -120,9 +88,20 @@ export default function EntradaScreen() {
       <ScrollView style={styles.scrollView}>
         <View style={styles.content}>
           <View style={[styles.form, isDarkMode && styles.formDark]}>
+            {/* Seleção de Cliente */}
+            <TouchableOpacity 
+              style={[styles.clienteSelector, isDarkMode && styles.clienteSelectorDark]}
+              onPress={() => setModalClienteVisible(true)}
+            >
+              <Text style={[styles.clienteSelectorText, isDarkMode && styles.textDark]}>
+                {selectedCliente ? selectedCliente.nome : 'Selecionar Cliente *'}
+              </Text>
+              <Icon name="arrow-drop-down" size={24} color={isDarkMode ? '#E0E0E0' : '#333'} />
+            </TouchableOpacity>
+
             <TextInput
               style={[styles.input, isDarkMode && styles.inputDark]}
-              placeholder="Código do Produto"
+              placeholder="Código do Equipamento *"
               placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
               value={productCode}
               onChangeText={setProductCode}
@@ -130,7 +109,7 @@ export default function EntradaScreen() {
             
             <TextInput
               style={[styles.input, isDarkMode && styles.inputDark]}
-              placeholder="Nome do Produto"
+              placeholder="Nome do Equipamento *"
               placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
               value={productName}
               onChangeText={setProductName}
@@ -139,48 +118,38 @@ export default function EntradaScreen() {
             <View style={styles.rowContainer}>
               <TextInput
                 style={[styles.inputHalf, isDarkMode && styles.inputDark]}
-                placeholder="Quantidade"
+                placeholder="Marca *"
                 placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-                keyboardType="numeric"
-                value={quantity}
-                onChangeText={setQuantity}
+                value={marca}
+                onChangeText={setMarca}
               />
               
               <TextInput
                 style={[styles.inputHalf, isDarkMode && styles.inputDark]}
-                placeholder="Preço Unitário (R$)"
+                placeholder="Modelo *"
                 placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-                keyboardType="numeric"
-                value={price}
-                onChangeText={setPrice}
+                value={modelo}
+                onChangeText={setModelo}
               />
             </View>
 
             <TextInput
               style={[styles.input, isDarkMode && styles.inputDark]}
-              placeholder="Fornecedor"
+              placeholder="Categoria *"
               placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-              value={supplier}
-              onChangeText={setSupplier}
+              value={category}
+              onChangeText={setCategory}
             />
-            
-            <View style={styles.rowContainer}>
-              <TextInput
-                style={[styles.inputHalf, isDarkMode && styles.inputDark]}
-                placeholder="Categoria"
-                placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-                value={category}
-                onChangeText={setCategory}
-              />
-              
-              <TextInput
-                style={[styles.inputHalf, isDarkMode && styles.inputDark]}
-                placeholder="Nota Fiscal"
-                placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-                value={invoice}
-                onChangeText={setInvoice}
-              />
-            </View>
+
+            <TextInput
+              style={[styles.input, isDarkMode && styles.inputDark]}
+              placeholder="Observações"
+              placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
+              value={observacoes}
+              onChangeText={setObservacoes}
+              multiline
+              numberOfLines={3}
+            />
 
             <TouchableOpacity style={[styles.scanButton, { borderColor: primaryColor }]}>
               <Icon name="qr-code-scanner" size={24} color={primaryColor} />
@@ -190,15 +159,15 @@ export default function EntradaScreen() {
 
           <TouchableOpacity 
             style={[styles.registerButton, { backgroundColor: primaryColor }]}
-            onPress={registrarEntrada}
+            onPress={registrarEquipamento}
           >
-            <Text style={styles.buttonText}>Registrar Entrada</Text>
+            <Text style={styles.buttonText}>Cadastrar Equipamento</Text>
           </TouchableOpacity>
           
           <View style={styles.historicoContainer}>
-            <Text style={[styles.historicoTitle, isDarkMode && styles.textDark]}>Histórico de Entradas</Text>
+            <Text style={[styles.historicoTitle, isDarkMode && styles.textDark]}>Equipamentos Cadastrados</Text>
             
-            {historico.map((item) => (
+            {equipamentos.map((item) => (
               <View key={item.id} style={[styles.historicoItem, isDarkMode && styles.historicoItemDark]}>
                 <View style={styles.itemHeader}>
                   <Text style={[styles.itemNome, isDarkMode && styles.textDark]}>{item.nome}</Text>
@@ -212,25 +181,18 @@ export default function EntradaScreen() {
                   </View>
                   
                   <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Quantidade:</Text>
-                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.quantidade}</Text>
+                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Cliente:</Text>
+                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.clienteNome}</Text>
                   </View>
                   
                   <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Preço Unit.:</Text>
-                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{formatarMoeda(item.precoUnitario)}</Text>
+                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Marca:</Text>
+                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.marca}</Text>
                   </View>
                   
                   <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Total:</Text>
-                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>
-                      {formatarMoeda(item.quantidade * item.precoUnitario)}
-                    </Text>
-                  </View>
-                  
-                  <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Fornecedor:</Text>
-                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.fornecedor}</Text>
+                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Modelo:</Text>
+                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.modelo}</Text>
                   </View>
                   
                   <View style={styles.detailRow}>
@@ -238,16 +200,61 @@ export default function EntradaScreen() {
                     <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.categoria}</Text>
                   </View>
                   
-                  <View style={styles.detailRow}>
-                    <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Nota Fiscal:</Text>
-                    <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.notaFiscal}</Text>
-                  </View>
+                  {item.observacoes && (
+                    <View style={styles.detailRow}>
+                      <Text style={[styles.detailLabel, isDarkMode && styles.textDark]}>Observações:</Text>
+                      <Text style={[styles.detailValue, isDarkMode && styles.textDark]}>{item.observacoes}</Text>
+                    </View>
+                  )}
                 </View>
               </View>
             ))}
           </View>
         </View>
       </ScrollView>
+
+      {/* Modal de Seleção de Cliente */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalClienteVisible}
+        onRequestClose={() => setModalClienteVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={[styles.modalContent, isDarkMode && styles.modalContentDark]}>
+            <View style={styles.modalHeader}>
+              <Text style={[styles.modalTitle, isDarkMode && styles.textDark]}>Selecionar Cliente</Text>
+              <TouchableOpacity onPress={() => setModalClienteVisible(false)}>
+                <Icon name="close" size={24} color={isDarkMode ? '#E0E0E0' : '#333'} />
+              </TouchableOpacity>
+            </View>
+
+            <FlatList
+              data={clientes}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[styles.clienteItem, isDarkMode && styles.clienteItemDark]}
+                  onPress={() => handleSelecionarCliente(item)}
+                >
+                  <View>
+                    <Text style={[styles.clienteItemName, isDarkMode && styles.textDark]}>{item.nome}</Text>
+                    <Text style={[styles.clienteItemInfo, isDarkMode && styles.textDark]}>{item.telefone}</Text>
+                    <Text style={[styles.clienteItemInfo, isDarkMode && styles.textDark]}>{item.email}</Text>
+                  </View>
+                  <Icon name="arrow-forward-ios" size={16} color={isDarkMode ? '#E0E0E0' : '#333'} />
+                </TouchableOpacity>
+              )}
+              ListEmptyComponent={
+                <View style={styles.emptyContainer}>
+                  <Icon name="person-off" size={50} color={isDarkMode ? '#A0A0A0' : colors.gray} />
+                  <Text style={[styles.emptyText, isDarkMode && styles.textDark]}>Nenhum cliente cadastrado</Text>
+                </View>
+              }
+            />
+          </View>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }
@@ -423,5 +430,87 @@ const styles = StyleSheet.create({
   detailValue: {
     fontSize: 14,
     fontWeight: '500',
-  }
+  },
+  // Modal styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: colors.white,
+    borderRadius: 12,
+    padding: 20,
+    width: '90%',
+    maxHeight: '80%',
+  },
+  modalContentDark: {
+    backgroundColor: '#1E1E1E',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.primary,
+  },
+  clienteItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.lightGray,
+  },
+  clienteItemDark: {
+    borderBottomColor: '#444',
+  },
+  clienteItemName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 4,
+  },
+  clienteItemInfo: {
+    fontSize: 14,
+    color: colors.gray,
+    marginBottom: 2,
+  },
+  clienteSelector: {
+    height: 50,
+    borderColor: colors.lightGray,
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    backgroundColor: colors.lightGray,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  clienteSelectorDark: {
+    backgroundColor: '#2A2A2A',
+    borderColor: '#444',
+  },
+  clienteSelectorText: {
+    color: '#333',
+    fontSize: 16,
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 32,
+  },
+  emptyText: {
+    marginTop: 8,
+    fontSize: 16,
+    color: colors.gray,
+    textAlign: 'center',
+  },
 });

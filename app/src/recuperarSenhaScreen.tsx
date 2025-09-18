@@ -1,33 +1,22 @@
 import Icon from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
-<<<<<<< HEAD
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { useState } from 'react';
 import { ActivityIndicator, Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { auth } from '../../config/firebase';
-=======
-import { useState } from 'react';
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
 import colors from './styles/colors';
 
 export default function RecuperarSenhaScreen() {
   const [email, setEmail] = useState('');
   const [enviado, setEnviado] = useState(false);
-<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
 
   const handleRecuperarSenha = async () => {
-=======
-
-  const handleRecuperarSenha = () => {
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
     if (email.trim() === '') {
       Alert.alert('Erro', 'Por favor, informe seu e-mail.');
       return;
     }
 
-<<<<<<< HEAD
     setLoading(true);
     try {
       await sendPasswordResetEmail(auth, email);
@@ -43,10 +32,6 @@ export default function RecuperarSenhaScreen() {
     } finally {
       setLoading(false);
     }
-=======
-    // Aqui seria implementada a lógica de recuperação de senha com API
-    setEnviado(true);
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
   };
 
   const handleVoltar = () => {
@@ -86,7 +71,6 @@ export default function RecuperarSenhaScreen() {
 
           {/* Botão de Enviar */}
           <TouchableOpacity 
-<<<<<<< HEAD
             style={email.trim() === '' || loading ? styles.disabledButton : styles.button} 
             disabled={email.trim() === '' || loading}
             onPress={handleRecuperarSenha}
@@ -96,13 +80,6 @@ export default function RecuperarSenhaScreen() {
             ) : (
               <Text style={styles.buttonText}>Enviar</Text>
             )}
-=======
-            style={email.trim() === '' ? styles.disabledButton : styles.button} 
-            disabled={email.trim() === ''}
-            onPress={handleRecuperarSenha}
-          >
-            <Text style={styles.buttonText}>Enviar</Text>
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
           </TouchableOpacity>
         </>
       ) : (

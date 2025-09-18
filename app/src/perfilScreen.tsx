@@ -1,23 +1,14 @@
 import Icon from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
-<<<<<<< HEAD
-import { signOut } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { auth } from '../../config/firebase';
 import { FirebaseService, FirebaseUser } from '../../config/firebaseService';
 import { useTheme } from '../../contexts/ThemeContext';
 import { UserService } from '../../services/userService';
-=======
-import { useState } from 'react';
-import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useTheme } from '../../contexts/ThemeContext';
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
 import colors from './styles/colors';
 
 export default function PerfilScreen() {
   const { isDarkMode, primaryColor } = useTheme();
-<<<<<<< HEAD
   const [userData, setUserData] = useState<FirebaseUser | null>(null);
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
@@ -26,6 +17,11 @@ export default function PerfilScreen() {
   const [editando, setEditando] = useState(false);
   const [loading, setLoading] = useState(true);
   const [salvando, setSalvando] = useState(false);
+
+  const handleLogout = () => {
+    try { router.dismissAll(); } catch {}
+    router.replace('/src/loginScreen');
+  };
 
   useEffect(() => {
     const unsubscribe = FirebaseService.onAuthStateChanged((user: FirebaseUser | null) => {
@@ -45,21 +41,11 @@ export default function PerfilScreen() {
   }, []);
 
   const handleSalvar = async () => {
-=======
-  const [nome, setNome] = useState('Eduardo Oliveira');
-  const [email, setEmail] = useState('eduardo@assistencia.com');
-  const [telefone, setTelefone] = useState('(11) 98765-4321');
-  const [cargo, setCargo] = useState('Técnico');
-  const [editando, setEditando] = useState(false);
-
-  const handleSalvar = () => {
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
     if (nome.trim() === '' || email.trim() === '' || telefone.trim() === '') {
       Alert.alert('Erro', 'Todos os campos são obrigatórios');
       return;
     }
 
-<<<<<<< HEAD
     if (!userData?.uid) {
       Alert.alert('Erro', 'Usuário não encontrado');
       return;
@@ -95,53 +81,12 @@ export default function PerfilScreen() {
     } finally {
       setSalvando(false);
     }
-=======
-    // Aqui seria implementada a lógica de atualização do perfil com API
-    Alert.alert('Sucesso', 'Perfil atualizado com sucesso!');
-    setEditando(false);
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
   };
 
   const handleAlterarSenha = () => {
     Alert.alert('Alterar Senha', 'Funcionalidade em desenvolvimento');
-<<<<<<< HEAD
   };
 
-  const handleLogout = async () => {
-=======
-    // Aqui seria implementada a navegação para a tela de alteração de senha
-  };
-
-  const handleLogout = () => {
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
-    Alert.alert(
-      'Sair',
-      'Tem certeza que deseja sair?',
-      [
-        {
-          text: 'Cancelar',
-          style: 'cancel',
-        },
-        {
-          text: 'Sim',
-<<<<<<< HEAD
-          onPress: async () => {
-            try {
-              await signOut(auth);
-              router.replace('/src/loginScreen');
-            } catch (error) {
-              Alert.alert('Erro', 'Erro ao fazer logout');
-            }
-          },
-=======
-          onPress: () => router.push('/src/loginScreen'),
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
-        },
-      ],
-    );
-  };
-
-<<<<<<< HEAD
   if (loading) {
     return (
       <ScrollView style={[styles.container, isDarkMode && styles.containerDark]}>
@@ -152,8 +97,6 @@ export default function PerfilScreen() {
     );
   }
 
-=======
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
   return (
     <ScrollView style={[styles.container, isDarkMode && styles.containerDark]}>
       <View style={[styles.header, isDarkMode && styles.headerDark]}>
@@ -163,7 +106,6 @@ export default function PerfilScreen() {
         <Text style={[styles.headerTitle, { color: primaryColor }, isDarkMode && styles.textDark]}>Meu Perfil</Text>
         <TouchableOpacity 
           onPress={() => editando ? handleSalvar() : setEditando(true)} 
-<<<<<<< HEAD
           style={[styles.editButton, salvando && styles.editButtonDisabled]}
           disabled={salvando}
         >
@@ -172,11 +114,6 @@ export default function PerfilScreen() {
             size={24} 
             color={salvando ? colors.gray : primaryColor} 
           />
-=======
-          style={styles.editButton}
-        >
-          <Icon name={editando ? "check" : "edit"} size={24} color={primaryColor} />
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
         </TouchableOpacity>
       </View>
 
@@ -209,24 +146,8 @@ export default function PerfilScreen() {
 
         <View style={styles.infoRow}>
           <Text style={[styles.infoLabel, isDarkMode && styles.infoLabelDark]}>E-mail</Text>
-<<<<<<< HEAD
           <Text style={[styles.infoValue, isDarkMode && styles.infoValueDark]}>{email}</Text>
           
-=======
-          {editando ? (
-            <TextInput
-              style={[styles.input, isDarkMode && styles.inputDark]}
-              value={email}
-              onChangeText={setEmail}
-              placeholder="E-mail"
-              placeholderTextColor={isDarkMode ? '#888' : '#aaa'}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          ) : (
-            <Text style={[styles.infoValue, isDarkMode && styles.infoValueDark]}>{email}</Text>
-          )}
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
         </View>
 
         <View style={styles.infoRow}>
@@ -321,12 +242,9 @@ const styles = StyleSheet.create({
   editButton: {
     padding: 8,
   },
-<<<<<<< HEAD
   editButtonDisabled: {
     opacity: 0.5,
   },
-=======
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
   profileImageContainer: {
     alignItems: 'center',
     marginTop: 20,
@@ -385,7 +303,6 @@ const styles = StyleSheet.create({
   infoValueDark: {
     color: '#fff',
   },
-<<<<<<< HEAD
   infoNote: {
     fontSize: 12,
     color: colors.gray,
@@ -395,8 +312,6 @@ const styles = StyleSheet.create({
   infoNoteDark: {
     color: '#aaa',
   },
-=======
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
   input: {
     borderWidth: 1,
     borderColor: colors.lightGray,
@@ -455,7 +370,6 @@ const styles = StyleSheet.create({
   logoutText: {
     color: '#F44336',
   },
-<<<<<<< HEAD
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -466,6 +380,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
-=======
->>>>>>> bb36819fe5797ef6aa9436cfd61f3900cc6aeb43
 });
